@@ -5,7 +5,7 @@ import axios from "axios";
 const http = axios.create({
   // Sử dụng biến môi trường thay vì hardcode
   // baseURL: import.meta.env.VITE_API_URL,
-  baseURL: '/.netlify/functions',
+  baseURL: '/api',
   headers: {
     "Content-Type": "application/json",
   },

@@ -10,12 +10,12 @@ export const todoService = {
 
   // Thêm mới
   create: async (data: { title: string; description: string }): Promise<TodoItemType> => {
-    const res = await http.post('/todos', { 
-      title: data.title, 
+    const res = await http.post('/todos', {
+      title: data.title,
       description: data.description, // Gửi thêm description
-      isCompleted: false 
+      isCompleted: false
     });
-    return res.data; 
+    return res.data;
   },
 
   update: async (id: number, todo: TodoItemType): Promise<TodoItemType> => {
