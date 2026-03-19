@@ -1,23 +1,34 @@
 import type { Context } from "@netlify/functions";
-
-// Database giả lập (Sẽ bay màu sau 15 phút không ai gọi)
-let todos = [
-  { id: 1, title: "Tách Microservices thành công", completed: true }
-];
+import { getAllTodos, createNewTodo } from "./todoLogic"; // Gọi thợ ra làm
 
 export default async (req: Request, context: Context) => {
   const headers = { "Content-Type": "application/json" };
+  const method = req.method;
 
-  if (req.method === "GET") {
-    return new Response(JSON.stringify(todos), { status: 200, headers });
+  try {
+    // 1. API Lấy danh sách
+    if (method === "GET") {
+      const data = getAllTodos(); // Gọi logic
+      return new Response(JSON.stringify(data), { status: 200, headers });
+    }
+
+    // 2. API Thêm mới
+    if (method === "POST") {
+      const body = await req.json();
+
+      // Validate sơ bộ tại cửa
+      if (!body.title) {
+        return new Response(JSON.stringify({ error: "Vui lòng nhập tiêu đề!" }), { status: 400, headers });
+      }
+
+      const newTodo = createNewTodo(body.title, body.description); // Gọi logic
+      return new Response(JSON.stringify(newTodo), { status: 201, headers });
+    }
+
+    return new Response("Method Not Allowed", { status: 405, headers });
+
+  } catch (error) {
+    // Bắt mọi lỗi sập nguồn để không bị văng 500 trắng trang
+    return new Response(JSON.stringify({ error: "Lỗi hệ thống Serverless!" }), { status: 500, headers });
   }
-
-  if (req.method === "POST") {
-    const body = await req.json();
-    const newTodo = { id: Date.now(), title: body.title, completed: false };
-    todos.push(newTodo);
-    return new Response(JSON.stringify(newTodo), { status: 201, headers });
-  }
-
-  return new Response("Method Not Allowed", { status: 405 });
 };
