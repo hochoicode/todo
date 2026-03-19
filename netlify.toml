@@ -1,8 +1,8 @@
-; # Chuyển hướng mọi request bắt đầu bằng /api/ vào thư mục functions ngầm
-; [[redirects]]
-;   from = "/api/*"
-;   to = "/.netlify/functions/:splat"
-;   status = 200s
+# Chuyển hướng mọi request bắt đầu bằng /api/ vào thư mục functions ngầm
+#[[redirects]]
+#  from = "/api/*"
+#  to = "/.netlify/functions/:splat"
+#  status = 200
 
 
 
